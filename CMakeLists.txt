@@ -7,8 +7,6 @@ enable_testing()
 
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
-#set(SFML_STATIC_LIBRARIES TRUE)
-
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
