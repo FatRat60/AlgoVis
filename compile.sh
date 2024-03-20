@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if ["$OSTYPE" == "msys"]; then
+if [["$OSTYPE" == "msys"]]; then
     cmake -S . -B build
     cmake --build build --config Release
     ./build/AlgoVis.exe
