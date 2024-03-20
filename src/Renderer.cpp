@@ -6,9 +6,9 @@
 #include <array>
 #include <iostream>
 
-Renderer::Renderer(sf::RenderWindow *window)
+Renderer::Renderer(sf::RenderWindow *w)
 {
-    window = window;
+    window = w;
     // initialize 
     for (int i = 0; i < 1000; i++)
     {
@@ -17,10 +17,6 @@ Renderer::Renderer(sf::RenderWindow *window)
     // shuffle the array
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle(data.begin(), data.end(), std::default_random_engine(seed));
-
-    for (int i = 0; i < 20; i++)
-        std::cout << data[i] << ' ';
-    std::cout << '\n';
 }
 
 void Renderer::EventLoop()
