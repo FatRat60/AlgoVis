@@ -1,26 +1,13 @@
 #include "Renderer.h"
 #include <SFML/Graphics.hpp>
-#include <random>
-#include <algorithm>
-#include <chrono>
-#include <array>
+#include "Sort.h"
 #include <iostream>
 
-Renderer::Renderer(sf::RenderWindow *w, std::array<int, MAX_ARRAY_SIZE> &data)
+Renderer::Renderer(sf::RenderWindow *w, int arraySize, sortAlgorithms algorithm_choice)
 {
     window = w;
-    size = 0.8;
-    // create rectangles
-    sf::Vector2u screenSize = w->getSize();
-    float width = float(screenSize.x) / MAX_ARRAY_SIZE;
-    float heightInc = float(screenSize.y) / MAX_ARRAY_SIZE;
-    for (int i = 0; i < MAX_ARRAY_SIZE; i++)
-    {
-         //shapes[i] = sf::RectangleShape(sf::Vector2f(width, heightInc * data[i]));
-         shapes[i].setSize(sf::Vector2f(width, heightInc * data[i]));
-         shapes[i].setFillColor(sf::Color::White);
-         shapes[i].setPosition(sf::Vector2f(i * width, screenSize.y - heightInc * data[i]));
-    }
+    window->setVerticalSyncEnabled(true); // framerate will match the screens refresh rate
+    
 }
 
 void Renderer::EventLoop()
@@ -34,8 +21,7 @@ void Renderer::EventLoop()
             {
             case sf::Event::KeyReleased:
                 if (event.key.scancode == sf::Keyboard::Scan::Space){
-                    size += 0.8;
-                    std::cout << size << "\n";
+                    sort.shuffle();
                 }
                 break;
             case sf::Event::Closed:
@@ -58,7 +44,7 @@ void Renderer::doDraw()
 
     // update rect positions based on sort algorithm
 
-    for (sf::RectangleShape shape : shapes)
+    for (sf::RectangleShape shape : sort.data)
         window->draw(shape);
 
     window->display(); // write to the screen

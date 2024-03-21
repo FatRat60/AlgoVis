@@ -13,7 +13,7 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(${PROJ_NAME} src/main.cpp src/Renderer.cpp)
+add_executable(${PROJ_NAME} src/main.cpp src/Renderer.cpp src/Sort.cpp)
 target_link_libraries(${PROJ_NAME} PRIVATE sfml-window sfml-graphics)
 target_include_directories(${PROJ_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_compile_features(${PROJ_NAME} PRIVATE cxx_std_17)

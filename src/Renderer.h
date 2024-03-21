@@ -3,16 +3,14 @@
 
 #include <SFML/Graphics.hpp>
 #include <array>
-
-#define MAX_ARRAY_SIZE 1000
+#include "Sort.h"
 
 class Renderer
 {
     public:
         sf::RenderWindow *window;
-        std::array<sf::RectangleShape, MAX_ARRAY_SIZE> shapes;
-        float size;
-        Renderer(sf::RenderWindow *window, std::array<int, MAX_ARRAY_SIZE> &data);
+        Sort sort;
+        Renderer(sf::RenderWindow *window, int arraySize, sortAlgorithms chosen_algorithm);
         void EventLoop();
 
     private:
