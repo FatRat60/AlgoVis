@@ -22,6 +22,9 @@ void Renderer::EventLoop()
             case sf::Event::Closed:
                 window->close();
                 break;
+            case sf::Event::Resized:
+                sort.shape_from_num(sf::Vector2u(event.size.width, event.size.height)); // update size/position of shapes to fit new screen
+                break;
             case sf::Event::KeyReleased:
                 if (event.key.scancode == sf::Keyboard::Scan::Space){
                     sort.shuffle(window->getSize());
@@ -44,8 +47,8 @@ void Renderer::doDraw()
 
     // update rect positions based on sort algorithm
 
-    for (sf::RectangleShape shape : sort.shapes)
-        window->draw(shape);
+    for (Shape shape : sort.shapes)
+        window->draw(shape.rect);
 
     window->display(); // write to the screen
 }

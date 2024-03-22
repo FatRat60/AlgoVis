@@ -3,7 +3,10 @@
 if [["$OSTYPE" == "msys"]]; then
     cmake -S . -B build
     cmake --build build --config Release
-    ./build/AlgoVis.exe
+    if [ $? -eq 0 ]; then
+        # only run exe if build is succesfful
+        ./build/AlgoVis.exe
+    fi
 else 
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
     cmake --build build
