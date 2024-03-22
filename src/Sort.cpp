@@ -5,7 +5,7 @@
 #include <array>
 #include <iostream>
 
-Sort::Sort(int arraySize, sortAlgorithms algorithm_choice)
+Sort::Sort(sf::Vector2u screenSize, int arraySize, sortAlgorithms algorithm_choice)
 {
     // init array
     if (arraySize > MAX_ARRAY_SIZE || arraySize < 0)
@@ -17,13 +17,26 @@ Sort::Sort(int arraySize, sortAlgorithms algorithm_choice)
         data[i] = i+1;
     }
     // shufle data
-    shuffle();
+    shuffle(screenSize);
 }
 
-void Sort::shuffle()
+void Sort::shuffle(sf::Vector2u screenSize)
 {
     generateSeed();
     std::shuffle(data.begin(), data.end(), std::default_random_engine(rng_seed));
+
+    // update shapes
+    float heightInc = float(screenSize.y) / arraySize;
+    float width = float(screenSize.x) / arraySize;
+
+    // init shapes
+    for (int i = 0; i < arraySize; i++)
+    {
+        float height = heightInc * data[i];
+        shapes[i].setFillColor(sf::Color::White);
+        shapes[i].setSize(sf::Vector2f(width, height));
+        shapes[i].setPosition(sf::Vector2f(i * width, screenSize.y - height));
+    }
 }
 
 void Sort::generateSeed()
