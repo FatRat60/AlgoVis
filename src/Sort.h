@@ -2,7 +2,6 @@
 #define SORT_H
 
 #include <SFML/Graphics.hpp>
-#include "Renderer.h"
 #include <array>
 
 #define MAX_ARRAY_SIZE 1000
@@ -15,10 +14,11 @@ enum sortAlgorithms
 class Sort
 {
     public:
-        std::array<sf::RectangleShape, MAX_ARRAY_SIZE> data;
+        std::array<uint16_t, MAX_ARRAY_SIZE> data;
+        int arraySize;
         sortAlgorithms chosenAlgorithm;
-        unsigned int rng_seed;
-        Sort(sf::Vector2u screenSize, int arraySize, sortAlgorithms algorithm_choice);
+        unsigned rng_seed;
+        Sort(int arraySize, sortAlgorithms algorithm_choice);
         void doSort();
         void shuffle();
         void generateSeed();
