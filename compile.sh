@@ -10,5 +10,5 @@ if [["$OSTYPE" == "msys"]]; then
 else 
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
     cmake --build build
-    ./build/AlgoVis
+    ./build/AlgoVis 800 0
 fi
