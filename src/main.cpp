@@ -6,15 +6,14 @@
 
 int main(int argc, char* argv[])
 {
-
-    // check num of args
+    // Check num of args
     if (argc < 3)
     {
-        std::cout << "Usage: AlgoVis <arraySize <= 1000> <algorithm choice 0-0>\n";
+        std::cout << "Usage: AlgoVis <arraysize: <= 1000> <algorithm choice: 0-0>\n";
         exit(1);
     }
 
-    // check bounds of args
+    // validate user input
     int arraySize = atoi(argv[1]);
     int algo = atoi(argv[2]);
     sortAlgorithms algorithm_choice;
@@ -22,7 +21,7 @@ int main(int argc, char* argv[])
         algorithm_choice = sortAlgorithms(algo);
     else
     {
-        std::cout << "Usage: AlgoVis <arraySize <= 1000> <algorithm choice 0-0>\n";
+        std::cout << "Usage: AlgoVis <arraysize: <= 1000> <algorithm choice: 0-0>\n";
         exit(1);
     }
 
