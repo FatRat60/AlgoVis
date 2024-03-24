@@ -15,12 +15,15 @@ enum sortAlgorithms
 
 struct Shape 
 {
-    sf::RectangleShape rect;
+    sf::RectangleShape *rect;
     uint16_t num;
 
     // swap func based on num
     void swap(Shape& other)
     {
+        sf::RectangleShape *temp = other.rect;
+        other.rect = rect;
+        rect = temp;
         std::swap(num, other.num);
     }
 
@@ -44,7 +47,9 @@ class Sort
         int arraySize;
         sortAlgorithms chosenAlgorithm;
         unsigned rng_seed;
+        bool killThread;
         Sort(sf::Vector2u screenSize, int arraySize, sortAlgorithms algorithm_choice);
+        ~Sort();
         void doSort();
         void shuffle(sf::Vector2u screenSize);
         void generateSeed();
