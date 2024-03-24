@@ -2,12 +2,29 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Sort.h"
+#include <stdlib.h>
 
-int main(int, char**)
+int main(int argc, char* argv[])
 {
-    // validate user input
-    int arraySize = 600;
-    sortAlgorithms algorithm_choice = bubble_sort;
+
+    // check num of args
+    if (argc < 3)
+    {
+        std::cout << "Usage: AlgoVis <arraySize <= 1000> <algorithm choice 0-0>\n";
+        exit(1);
+    }
+
+    // check bounds of args
+    int arraySize = atoi(argv[1]);
+    int algo = atoi(argv[2]);
+    sortAlgorithms algorithm_choice;
+    if (algo >= 0 && algo < IMPLEMENTED_SORTS)
+        algorithm_choice = sortAlgorithms(algo);
+    else
+    {
+        std::cout << "Usage: AlgoVis <arraySize <= 1000> <algorithm choice 0-0>\n";
+        exit(1);
+    }
 
     // create window in main thread
     sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(800, 600), "Test");

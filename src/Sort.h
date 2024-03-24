@@ -6,6 +6,7 @@
 #include <cstdint>
 
 #define MAX_ARRAY_SIZE 1000
+#define IMPLEMENTED_SORTS 1
 
 enum sortAlgorithms
 {
