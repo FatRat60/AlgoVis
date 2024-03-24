@@ -13,6 +13,7 @@ Renderer::Renderer(sf::RenderWindow *w, int arraySize, sortAlgorithms algorithm_
 
 Renderer::~Renderer()
 {
+    std::cout << "deleting Sort\n";
     if (sortThread.joinable())
     {
         sort.killThread = true;
@@ -39,8 +40,7 @@ void Renderer::EventLoop()
             case sf::Event::KeyReleased:
                 if (event.key.scancode == sf::Keyboard::Scan::Space && !sortThread.joinable()){
                     std::cout << "Beginning Sort!\n";
-                    //sortThread = std::thread(&Sort::doSort, std::ref(sort)); // spawn the sorting thread
-                    sort.shuffle(window->getSize());
+                    sortThread = std::thread(&Sort::doSort, std::ref(sort)); // spawn the sorting thread
                 }
                 break;
             
@@ -58,9 +58,8 @@ void Renderer::doDraw()
     window->clear(sf::Color::Black); // clear the screen
 
     // update rect positions based on sort algorithm
-
-    for (Shape shape : sort.shapes)
-        window->draw(*shape.rect);
+    for (int i = 0; i < sort.arraySize; i++)
+        window->draw(sort.shapes[i].rect);
 
     window->display(); // write to the screen
 }

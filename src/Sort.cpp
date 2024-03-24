@@ -4,6 +4,7 @@
 #include <chrono>
 #include <array>
 #include <iostream>
+#include <thread>
 
 Sort::Sort(sf::Vector2u screenSize, int arraySize, sortAlgorithms algorithm_choice)
 {
@@ -17,19 +18,12 @@ Sort::Sort(sf::Vector2u screenSize, int arraySize, sortAlgorithms algorithm_choi
     for (int i = 0; i < arraySize; i++)
     {
         // only set num. RectangleShape will be init from num in shape_from_num()
-        shapes[i].rect = new sf::RectangleShape();
         shapes[i].num = i+1;
     }
 
     shape_from_num(screenSize);
     // shufle data
     shuffle(screenSize);
-}
-
-Sort::~Sort()
-{
-    for (auto shape : shapes)
-        delete shape.rect;
 }
 
 void Sort::shuffle(sf::Vector2u screenSize)
@@ -61,9 +55,9 @@ void Sort::shape_from_num(sf::Vector2u screenSize)
     {
         Shape *cur = &shapes[i];
         float height = heightInc * cur->num;
-        cur->rect->setFillColor(sf::Color::White);
-        cur->rect->setSize(sf::Vector2f(width, height));
-        cur->rect->setPosition(sf::Vector2f(i * width, screenSize.y - height));
+        cur->rect.setFillColor(sf::Color::White);
+        cur->rect.setSize(sf::Vector2f(width, height));
+        cur->rect.setPosition(sf::Vector2f(i * width, screenSize.y - height));
     }
 }
 
@@ -94,10 +88,9 @@ void Sort::bubbleSort()
             if (shapes[i+1] < shapes[i])
             {
                 didSwap = true;
-                Shape temp = shapes[i+1];
-                shapes[i+1] = shapes[i];
-                shapes[i] = temp;
+                swap(shapes[i], shapes[i+1]);
             }
+            std::this_thread::sleep_for(std::chrono::microseconds(500)); // delay sort
         }
     }
 }

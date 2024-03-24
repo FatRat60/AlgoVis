@@ -15,16 +15,19 @@ enum sortAlgorithms
 
 struct Shape 
 {
-    sf::RectangleShape *rect;
+    sf::RectangleShape rect;
     uint16_t num;
 
     // swap func based on num
     void swap(Shape& other)
     {
-        sf::RectangleShape *temp = other.rect;
-        other.rect = rect;
-        rect = temp;
+        // get old positions
+        sf::Vector2f curPos = rect.getPosition();
+        sf::Vector2f otherPos = other.rect.getPosition();
+        std::swap(curPos.x, otherPos.x);
         std::swap(num, other.num);
+        rect.setPosition(curPos);
+        other.rect.setPosition(otherPos);
     }
 
     // overload for <
@@ -49,7 +52,6 @@ class Sort
         unsigned rng_seed;
         bool killThread;
         Sort(sf::Vector2u screenSize, int arraySize, sortAlgorithms algorithm_choice);
-        ~Sort();
         void doSort();
         void shuffle(sf::Vector2u screenSize);
         void generateSeed();
