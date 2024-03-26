@@ -53,12 +53,12 @@ class Sort
         bool killThread;
         bool canRead;
         bool sortDone;
-        Sort(sf::Vector2u screenSize, sortAlgorithms algorithm_choice);
+        Sort(sf::Vector2u screenSize, int title_height, sortAlgorithms algorithm_choice);
         void doSort();
-        void shuffle(sf::Vector2u screenSize);
+        void shuffle();
         void generateSeed();
         friend void swap(Shape& s1, Shape& s2);
-        void shape_from_num(sf::Vector2u screenSize);
+        void shape_from_num(sf::Vector2u screenSize, int title_height);
 
     private:
         void bubbleSort();

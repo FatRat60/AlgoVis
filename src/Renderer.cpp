@@ -5,9 +5,10 @@
 #include <thread>
 
 Renderer::Renderer()
-    : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), bubble_sort)
+    : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), TITLE_HEIGHT, bubble_sort)
 {
     window.setVerticalSyncEnabled(true); // framerate will match the screens refresh rate
+    titleBarInit();
 }
 
 void Renderer::EventLoop()
@@ -31,7 +32,8 @@ void Renderer::EventLoop()
                     event.size.height = MIN_WIN_SIZE_Y;
                     window.setSize(sf::Vector2u(event.size.width, event.size.height));
                 }
-                sort.shape_from_num(sf::Vector2u(event.size.width, event.size.height)); // update size/position of shapes to fit new screen
+                title_bar.setSize(sf::Vector2f(event.size.width, TITLE_HEIGHT));
+                sort.shape_from_num(sf::Vector2u(event.size.width, event.size.height), TITLE_HEIGHT); // update size/position of shapes to fit new screen
                 break;
 
             case sf::Event::KeyReleased:
@@ -44,8 +46,11 @@ void Renderer::EventLoop()
                     case sf::Keyboard::Scan::R:
                         if (!sortThread.joinable())
                         {
-                            sort.shuffle(window.getSize());
+                            sort.shuffle();
                         }
+                        break;
+
+                    case sf::Keyboard::Scan::Num1: // bubble sort selected
                         break;
 
                     case sf::Keyboard::Scan::Space:
@@ -82,9 +87,19 @@ void Renderer::doDraw()
 {
     window.clear(sf::Color::Black); // clear the screen
 
+    // render title block
+    window.draw(title_bar);
+
     // update rect positions based on sort algorithm
     for (int i = 0; i < MAX_ARRAY_SIZE; i++)
         window.draw(sort.shapes[i].rect);
 
     window.display(); // write to the screen
+}
+
+void Renderer::titleBarInit()
+{
+    title_bar.setFillColor(sf::Color::White);
+    title_bar.setPosition(0, 0);
+    title_bar.setSize(sf::Vector2f(MIN_WIN_SIZE_X, TITLE_HEIGHT));
 }

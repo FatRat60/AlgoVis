@@ -6,7 +6,7 @@
 #include <iostream>
 #include <thread>
 
-Sort::Sort(sf::Vector2u screenSize, sortAlgorithms algorithm_choice)
+Sort::Sort(sf::Vector2u screenSize, int title_height, sortAlgorithms algorithm_choice)
 {
     std::cout << "sort init\n";
     killThread = false;
@@ -21,18 +21,15 @@ Sort::Sort(sf::Vector2u screenSize, sortAlgorithms algorithm_choice)
         shapes[i].num = i+1;
     }
 
-    shape_from_num(screenSize);
+    shape_from_num(screenSize, title_height);
     // shufle data
-    shuffle(screenSize);
+    shuffle();
 }
 
-void Sort::shuffle(sf::Vector2u screenSize)
+void Sort::shuffle()
 {
     generateSeed();
     std::shuffle(shapes.begin(), shapes.end(), std::default_random_engine(rng_seed));
-
-    // update shapes
-    //shape_from_num(screenSize);
 }
 
 void Sort::generateSeed()
@@ -45,9 +42,9 @@ void swap(Shape& s1, Shape& s2)
     s1.swap(s2);
 }
 
-void Sort::shape_from_num(sf::Vector2u screenSize)
+void Sort::shape_from_num(sf::Vector2u screenSize, int title_height)
 {
-    float heightInc = float(screenSize.y) / MAX_ARRAY_SIZE;
+    float heightInc = float(screenSize.y - title_height) / MAX_ARRAY_SIZE;
     float width = float(screenSize.x) / MAX_ARRAY_SIZE;
     float line_thickness = width * -0.10;
 
