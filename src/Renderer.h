@@ -6,14 +6,16 @@
 #include "Sort.h"
 #include <thread>
 
+#define MIN_WIN_SIZE_X 800
+#define MIN_WIN_SIZE_Y 600
+
 class Renderer
 {
     public:
-        sf::RenderWindow *window;
+        sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer");
         Sort sort;
         std::thread sortThread;
-        Renderer(sf::RenderWindow *window, sortAlgorithms chosen_algorithm);
-        ~Renderer();
+        Renderer();
         void EventLoop();
 
     private:

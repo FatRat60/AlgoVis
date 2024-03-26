@@ -7,7 +7,7 @@
 
 #define MAX_ARRAY_SIZE 100
 #define IMPLEMENTED_SORTS 1
-#define SORT_DELAY 2
+#define SORT_DELAY 3
 
 enum sortAlgorithms
 {

@@ -8,6 +8,7 @@
 
 Sort::Sort(sf::Vector2u screenSize, sortAlgorithms algorithm_choice)
 {
+    std::cout << "sort init\n";
     killThread = false;
     canRead = true;
     sortDone = false;
@@ -76,7 +77,7 @@ void Sort::doSort()
         break;
     }
     std::cout << "done sorting!\n";
-    sortDone = true;
+    sortDone = 1 - killThread;
 }
 
 void Sort::bubbleSort()
@@ -91,14 +92,12 @@ void Sort::bubbleSort()
             shapes[i].rect.setFillColor(sf::Color::Red);
             shapes[i+1].rect.setFillColor(sf::Color::Red);
             std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
-            canRead = false; // lock shapes
             // found a pair out of order
             if (shapes[i+1] < shapes[i])
             {
                 didSwap = true;
                 swap(shapes[i], shapes[i+1]);
             }
-            canRead = true; // unlock shapes
             std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
             shapes[i].rect.setFillColor(sf::Color::White);
             shapes[i+1].rect.setFillColor(sf::Color::White);
