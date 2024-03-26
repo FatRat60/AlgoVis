@@ -12,7 +12,7 @@ class Renderer
         sf::RenderWindow *window;
         Sort sort;
         std::thread sortThread;
-        Renderer(sf::RenderWindow *window, int arraySize, sortAlgorithms chosen_algorithm);
+        Renderer(sf::RenderWindow *window, sortAlgorithms chosen_algorithm);
         ~Renderer();
         void EventLoop();
 

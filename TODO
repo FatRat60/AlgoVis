@@ -1,6 +1,2 @@
-- get arraySize and algorithm choice from commandline args
-- implement sorting
-  - Rendering in main thread, sorting in subthread (communicate via pipe)
-- add commandline arg for speed of animation
 - Change color of rect currently being sorted (or being looked at ig)
 - add audio to sort render

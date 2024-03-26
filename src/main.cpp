@@ -7,9 +7,9 @@
 int main(int argc, char* argv[])
 {
     // Check num of args
-    if (argc < 3)
+    if (argc < 2)
     {
-        std::cout << "Usage: AlgoVis <arraysize: <= 1000> <algorithm choice: 0-0>\n";
+        std::cout << "Usage: AlgoVis <algorithm choice: 0-0>\n";
         exit(1);
     }
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
         algorithm_choice = sortAlgorithms(algo);
     else
     {
-        std::cout << "Usage: AlgoVis <arraysize: <= 1000> <algorithm choice: 0-0>\n";
+        std::cout << "Usage: AlgoVis <algorithm choice: 0-0>\n";
         exit(1);
     }
 
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(800, 600), "Test");
 
     // TODO: Create sorting thread
-    Renderer renderer(window, arraySize, algorithm_choice);
+    Renderer renderer(window, algorithm_choice);
     
     renderer.EventLoop();
     return 0;

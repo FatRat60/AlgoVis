@@ -6,16 +6,15 @@
 #include <iostream>
 #include <thread>
 
-Sort::Sort(sf::Vector2u screenSize, int arraySize, sortAlgorithms algorithm_choice)
+Sort::Sort(sf::Vector2u screenSize, sortAlgorithms algorithm_choice)
 {
     killThread = false;
+    canRead = true;
+    sortDone = false;
     chosenAlgorithm = algorithm_choice;
     // init array
-    if (arraySize > MAX_ARRAY_SIZE || arraySize < 0)
-        arraySize = MAX_ARRAY_SIZE;
-    this->arraySize = arraySize;
 
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < MAX_ARRAY_SIZE; i++)
     {
         // only set num. RectangleShape will be init from num in shape_from_num()
         shapes[i].num = i+1;
@@ -47,15 +46,18 @@ void swap(Shape& s1, Shape& s2)
 
 void Sort::shape_from_num(sf::Vector2u screenSize)
 {
-    float heightInc = float(screenSize.y) / arraySize;
-    float width = float(screenSize.x) / arraySize;
+    float heightInc = float(screenSize.y) / MAX_ARRAY_SIZE;
+    float width = float(screenSize.x) / MAX_ARRAY_SIZE;
+    float line_thickness = width * -0.10;
 
     // init shapes
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < MAX_ARRAY_SIZE; i++)
     {
         Shape *cur = &shapes[i];
         float height = heightInc * cur->num;
         cur->rect.setFillColor(sf::Color::White);
+        cur->rect.setOutlineColor(sf::Color::Black);
+        cur->rect.setOutlineThickness(line_thickness);
         cur->rect.setSize(sf::Vector2f(width, height));
         cur->rect.setPosition(sf::Vector2f(i * width, screenSize.y - height));
     }
@@ -74,23 +76,37 @@ void Sort::doSort()
         break;
     }
     std::cout << "done sorting!\n";
+    sortDone = true;
 }
 
 void Sort::bubbleSort()
 {
     bool didSwap = true;
+    int end_point = MAX_ARRAY_SIZE - 1;
     while (didSwap && !killThread)
     {
         didSwap = false;
-        for (int i = 0; i < arraySize-2; i++)
+        for (int i = 0; i < end_point; i++)
         {
+            shapes[i].rect.setFillColor(sf::Color::Red);
+            shapes[i+1].rect.setFillColor(sf::Color::Red);
+            std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
+            canRead = false; // lock shapes
             // found a pair out of order
             if (shapes[i+1] < shapes[i])
             {
                 didSwap = true;
                 swap(shapes[i], shapes[i+1]);
             }
-            std::this_thread::sleep_for(std::chrono::microseconds(500)); // delay sort
+            canRead = true; // unlock shapes
+            std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
+            shapes[i].rect.setFillColor(sf::Color::White);
+            shapes[i+1].rect.setFillColor(sf::Color::White);
         }
+        end_point--;
     }
+    if (killThread)
+        std::cout << "Thread killed\n";
+    if (!didSwap)
+        std::cout << "bubble finished\n";
 }

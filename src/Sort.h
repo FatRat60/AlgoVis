@@ -5,8 +5,9 @@
 #include <array>
 #include <cstdint>
 
-#define MAX_ARRAY_SIZE 1000
+#define MAX_ARRAY_SIZE 100
 #define IMPLEMENTED_SORTS 1
+#define SORT_DELAY 2
 
 enum sortAlgorithms
 {
@@ -47,11 +48,12 @@ class Sort
 {
     public:
         std::array<Shape, MAX_ARRAY_SIZE> shapes;
-        int arraySize;
         sortAlgorithms chosenAlgorithm;
         unsigned rng_seed;
         bool killThread;
-        Sort(sf::Vector2u screenSize, int arraySize, sortAlgorithms algorithm_choice);
+        bool canRead;
+        bool sortDone;
+        Sort(sf::Vector2u screenSize, sortAlgorithms algorithm_choice);
         void doSort();
         void shuffle(sf::Vector2u screenSize);
         void generateSeed();
