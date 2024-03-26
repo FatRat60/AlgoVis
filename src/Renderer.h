@@ -13,8 +13,10 @@
 class Renderer
 {
     public:
-        sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer");
+        sf::RenderWindow window;
         sf::RectangleShape title_bar;
+        sf::Font font;
+        sf::Text title_text;
         Sort sort;
         std::thread sortThread;
         Renderer();
@@ -22,6 +24,7 @@ class Renderer
 
     private:
         void titleBarInit();
+        void titleTextInit();
         void doDraw();
 };
 

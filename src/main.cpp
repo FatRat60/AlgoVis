@@ -7,7 +7,7 @@
 int main(int argc, char* argv[])
 {
     // TODO: Create sorting thread
-    Renderer renderer = Renderer();
+    Renderer renderer;
     renderer.EventLoop();
     
     return 0;

@@ -16,7 +16,11 @@ FetchContent_MakeAvailable(SFML)
 add_executable(${PROJ_NAME} src/main.cpp src/Renderer.cpp src/Sort.cpp)
 target_link_libraries(${PROJ_NAME} PRIVATE sfml-window sfml-graphics)
 target_include_directories(${PROJ_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
-target_compile_features(${PROJ_NAME} PRIVATE cxx_std_17)
+target_compile_features(${PROJ_NAME} PRIVATE cxx_std_11)
+
+add_custom_command(TARGET ${PROJ_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    ${CMAKE_CURRENT_SOURCE_DIR}/resources/ $<TARGET_FILE_DIR:${PROJ_NAME}>)
 
 if(WIN32)
     add_custom_command(

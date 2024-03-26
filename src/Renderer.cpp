@@ -5,10 +5,18 @@
 #include <thread>
 
 Renderer::Renderer()
-    : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), TITLE_HEIGHT, bubble_sort)
+    : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), TITLE_HEIGHT, bubble_sort),
+    window(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer")
 {
     window.setVerticalSyncEnabled(true); // framerate will match the screens refresh rate
+    // init font
+    if (!font.loadFromFile("resources/arial.ttf"))
+    {
+        std::cout << "Could not load font!\n";
+        exit(1);
+    }
     titleBarInit();
+    titleTextInit();
 }
 
 void Renderer::EventLoop()
@@ -51,6 +59,7 @@ void Renderer::EventLoop()
                         break;
 
                     case sf::Keyboard::Scan::Num1: // bubble sort selected
+
                         break;
 
                     case sf::Keyboard::Scan::Space:
@@ -90,6 +99,9 @@ void Renderer::doDraw()
     // render title block
     window.draw(title_bar);
 
+    // render title
+    window.draw(title_text);
+
     // update rect positions based on sort algorithm
     for (int i = 0; i < MAX_ARRAY_SIZE; i++)
         window.draw(sort.shapes[i].rect);
@@ -102,4 +114,14 @@ void Renderer::titleBarInit()
     title_bar.setFillColor(sf::Color::White);
     title_bar.setPosition(0, 0);
     title_bar.setSize(sf::Vector2f(MIN_WIN_SIZE_X, TITLE_HEIGHT));
+}
+
+void Renderer::titleTextInit()
+{
+    float half_width = MIN_WIN_SIZE_X / 2;
+    title_text.setFont(font);
+    title_text.setString("Bubble Sort");
+    title_text.setCharacterSize(TITLE_HEIGHT / 2);
+    title_text.setFillColor(sf::Color::Black);
+    title_text.setPosition(sf::Vector2f(half_width / 2, 0));
 }
