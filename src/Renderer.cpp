@@ -23,21 +23,31 @@ void Renderer::EventLoop()
                 window.close();
                 sort.killThread = sortThread.joinable();
                 break;
+
             case sf::Event::Resized:
+                if (event.size.width < MIN_WIN_SIZE_X || event.size.height < MIN_WIN_SIZE_Y)
+                {
+                    event.size.width = MIN_WIN_SIZE_X;
+                    event.size.height = MIN_WIN_SIZE_Y;
+                    window.setSize(sf::Vector2u(event.size.width, event.size.height));
+                }
                 sort.shape_from_num(sf::Vector2u(event.size.width, event.size.height)); // update size/position of shapes to fit new screen
                 break;
+
             case sf::Event::KeyReleased:
                 switch (event.key.scancode)
                 {
                     case sf::Keyboard::Scan::K:
                         sort.killThread = sortThread.joinable(); 
                         break;
+
                     case sf::Keyboard::Scan::R:
                         if (!sortThread.joinable())
                         {
                             sort.shuffle(window.getSize());
                         }
                         break;
+
                     case sf::Keyboard::Scan::Space:
                         if (!sortThread.joinable())
                         {
@@ -45,11 +55,12 @@ void Renderer::EventLoop()
                             sortThread = std::thread(&Sort::doSort, std::ref(sort)); // spawn the sorting thread
                         }
                         break;
+
                     default:
                         break;
                 }
                 break;
-            
+
             default:
                 break;
             }

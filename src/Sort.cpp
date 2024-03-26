@@ -77,7 +77,7 @@ void Sort::doSort()
         break;
     }
     std::cout << "done sorting!\n";
-    sortDone = 1 - killThread;
+    sortDone = !killThread; // set sortDOne to true only if thread wasnt killed
 }
 
 void Sort::bubbleSort()
