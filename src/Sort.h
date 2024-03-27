@@ -12,7 +12,8 @@ enum sortAlgorithms
 {
     bubble_sort,
     merge_sort,
-    selection_sort
+    selection_sort,
+    insertion_sort
 };
 
 struct Shape 
@@ -62,10 +63,12 @@ class Sort
         void shape_from_num(sf::Vector2u screenSize, int title_height);
 
     private:
+        void initShapeCopy(Shape *copy, Shape *original);
         void bubbleSort();
         void mergeSort(int left, int right);
         void merge(int left, int middle, int right);
         void selectionSort();
+        void insertionSort();
 };
 
 #endif

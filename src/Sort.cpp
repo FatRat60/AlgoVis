@@ -78,12 +78,26 @@ void Sort::doSort()
     case selection_sort:
         selectionSort();
         break;
+
+    case insertion_sort:
+        insertionSort();
+        break;
     
     default:
         break;
     }
     std::cout << "done sorting!\n";
     sortDone = !killThread; // set sortDOne to true only if thread wasnt killed
+}
+
+void Sort::initShapeCopy(Shape *copy, Shape *original)
+{
+    copy->num = original->num;
+    copy->rect.setFillColor(original->rect.getFillColor());
+    copy->rect.setPosition(original->rect.getPosition());
+    copy->rect.setSize(original->rect.getSize());
+    copy->rect.setOutlineColor(original->rect.getOutlineColor());
+    copy->rect.setOutlineThickness(original->rect.getOutlineThickness());
 }
 
 void Sort::bubbleSort()
@@ -210,5 +224,30 @@ void Sort::selectionSort()
         shapes[start].rect.setFillColor(sf::Color::White);
         lowest->rect.setFillColor(sf::Color::White);
         start++;
+    }
+}
+
+void Sort::insertionSort()
+{
+    for (int i = 1; i < MAX_ARRAY_SIZE; i++)
+    {
+        if (killThread)
+            break;
+        shapes[i].rect.setFillColor(sf::Color::Red);
+        Shape key;
+        initShapeCopy(&key, &shapes[i]);
+        int j = i - 1;
+        std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY) / 2); // delay sort
+        while (j >= 0 && key < shapes[j])
+        {
+            shapes[j].rect.setFillColor(sf::Color::Red);
+            std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY) / 2); // delay sort
+            swap(shapes[j+1], shapes[j]);
+            shapes[j].rect.setFillColor(sf::Color::White);
+            j--;
+        }
+        swap(shapes[j+1], key);
+        shapes[j+1].rect.setFillColor(sf::Color::White);
+        std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY) / 2); // delay sort
     }
 }

@@ -68,6 +68,11 @@ void Renderer::EventLoop()
                         title_text.setString("Selection Sort");
                         sort.chosenAlgorithm = selection_sort;
                         break;
+                    
+                    case sf::Keyboard::Scan::Num4:
+                        title_text.setString("Insertion Sort");
+                        sort.chosenAlgorithm = insertion_sort;
+                        break;
 
                     case sf::Keyboard::Scan::Space:
                         std::cout << "Beginning Sort!\n";
