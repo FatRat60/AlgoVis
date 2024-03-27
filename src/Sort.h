@@ -6,12 +6,13 @@
 #include <cstdint>
 
 #define MAX_ARRAY_SIZE 100
-#define IMPLEMENTED_SORTS 1
-#define SORT_DELAY 3
+#define SORT_DELAY 5
 
 enum sortAlgorithms
 {
-    bubble_sort
+    bubble_sort,
+    merge_sort,
+    selection_sort
 };
 
 struct Shape 
@@ -62,6 +63,9 @@ class Sort
 
     private:
         void bubbleSort();
+        void mergeSort(int left, int right);
+        void merge(int left, int middle, int right);
+        void selectionSort();
 };
 
 #endif

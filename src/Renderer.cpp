@@ -45,33 +45,43 @@ void Renderer::EventLoop()
                 break;
 
             case sf::Event::KeyReleased:
-                switch (event.key.scancode)
+                // commands usable while not sorting
+                if (!sortThread.joinable())
                 {
-                    case sf::Keyboard::Scan::K:
-                        sort.killThread = sortThread.joinable(); 
-                        break;
-
+                    switch (event.key.scancode)
+                    {
                     case sf::Keyboard::Scan::R:
-                        if (!sortThread.joinable())
-                        {
-                            sort.shuffle();
-                        }
+                        sort.shuffle();
                         break;
 
                     case sf::Keyboard::Scan::Num1: // bubble sort selected
+                        title_text.setString("Bubble Sort");
+                        sort.chosenAlgorithm = bubble_sort;
+                        break;
 
+                    case sf::Keyboard::Scan::Num2:
+                        title_text.setString("Merge Sort");
+                        sort.chosenAlgorithm = merge_sort;
+                        break;
+                    
+                    case sf::Keyboard::Scan::Num3:
+                        title_text.setString("Selection Sort");
+                        sort.chosenAlgorithm = selection_sort;
                         break;
 
                     case sf::Keyboard::Scan::Space:
-                        if (!sortThread.joinable())
-                        {
-                            std::cout << "Beginning Sort!\n";
-                            sortThread = std::thread(&Sort::doSort, std::ref(sort)); // spawn the sorting thread
-                        }
+                        std::cout << "Beginning Sort!\n";
+                        sortThread = std::thread(&Sort::doSort, std::ref(sort)); // spawn the sorting thread
                         break;
 
                     default:
                         break;
+                    }
+                }
+                // commands usable while sorting
+                else if (event.key.scancode == sf::Keyboard::Scan::K)
+                {
+                    sort.killThread = true;
                 }
                 break;
 
@@ -89,7 +99,6 @@ void Renderer::EventLoop()
             sort.killThread = false;
         }
     }
-    std::cout << "Window Closed\n";
 }
 
 void Renderer::doDraw()

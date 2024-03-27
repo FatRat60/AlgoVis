@@ -69,6 +69,15 @@ void Sort::doSort()
         std::cout << "Doing bubble\n";
         bubbleSort();
         break;
+
+    case merge_sort:
+        std::cout << "Doing merge\n";
+        mergeSort(0, MAX_ARRAY_SIZE);
+        break;
+
+    case selection_sort:
+        selectionSort();
+        break;
     
     default:
         break;
@@ -105,4 +114,101 @@ void Sort::bubbleSort()
         std::cout << "Thread killed\n";
     if (!didSwap)
         std::cout << "bubble finished\n";
+}
+
+void Sort::mergeSort(int left, int right)
+{
+    // base case
+    if (right - left < 2)
+        return;
+    
+    int midpoint = (right - left) / 2;
+
+    std::cout << "go Left\n";
+    mergeSort(left, midpoint);
+
+    std::cout << "go Right\n";
+    mergeSort(midpoint + 1, right);
+
+    // merge values
+    std::cout << "Merge!\n";
+    merge(left, midpoint, right);
+}
+
+void Sort::merge(int left, int middle, int right)
+{
+    std::cout << "SIZE: " << right - left << "\nMiddle: " << middle << "\n";
+    int k = 0;
+    int SIZE = right - left;
+    Shape temp[SIZE];
+    int left_start = left;
+    std::cout << "Left Start: " << left_start << "\n";
+    int right_start = right;
+    std::cout << "Right Start: " << right_start << "\n";
+    // sort values into temp array
+    while (left_start <= middle && right_start < right)
+    {
+        if (shapes[left_start] < shapes[right_start])
+        {
+            temp[k++] = shapes[left_start++];
+        }
+        else 
+        {
+            temp[k++] = shapes[right_start++];
+        }
+    }
+    // write remaining values from either left or right
+    if (left_start <= middle)
+    {
+        for (int i = left_start; i <= middle; i++)
+        {
+            temp[k++] = shapes[i];
+        }
+    }
+    else
+    {
+        for (int i = right_start; i < right; i++)
+        {
+            temp[k++] = shapes[i];
+        }
+    }
+
+    // copy from temp back to shapes
+    for (int i = 0; i < SIZE; i++)
+    {
+        std::cout << "shapes[" << i+left << "] = temp[" << i << "]\n";
+        shapes[i+left] = temp[i];
+    }
+    std::cout << " End merge\n";
+}
+
+void Sort::selectionSort()
+{
+    int start = 0;
+    while (start < MAX_ARRAY_SIZE && !killThread)
+    {
+        Shape *lowest = &shapes[start];
+        int swapIndex = start;
+        lowest->rect.setFillColor(sf::Color::Red);
+        for (int i = start + 1; i < MAX_ARRAY_SIZE; i++)
+        {
+            shapes[i].rect.setFillColor(sf::Color::Red);
+            std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
+            if (shapes[i] < *lowest)
+            {
+                lowest->rect.setFillColor(sf::Color::White);
+                shapes[start].rect.setFillColor(sf::Color::Red);
+                lowest = &shapes[i];
+                swapIndex = i;
+            }
+            else
+            {
+                shapes[i].rect.setFillColor(sf::Color::White);
+            }
+        }
+        swap(shapes[start], shapes[swapIndex]);
+        shapes[start].rect.setFillColor(sf::Color::White);
+        lowest->rect.setFillColor(sf::Color::White);
+        start++;
+    }
 }
