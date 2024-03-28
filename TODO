@@ -1,2 +1,6 @@
 - Change color of rect currently being sorted (or being looked at ig)
 - add audio to sort render
+
+merge sort broken because when merging the two sub arrays, the new position on the screen needs to be
+correctly written to the Shape obj when being init'd in the temp array. Then swap() can be used w/o issue
+when writing from temp[] to shapes[] at the end of merge()

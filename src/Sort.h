@@ -24,11 +24,17 @@ struct Shape
     // swap func based on num
     void swap(Shape& other)
     {
+        
+        std::swap(num, other.num);
+        swapPos(other);
+    }
+
+    void swapPos(Shape& other)
+    {
         // get old positions
         sf::Vector2f curPos = rect.getPosition();
         sf::Vector2f otherPos = other.rect.getPosition();
         std::swap(curPos.x, otherPos.x);
-        std::swap(num, other.num);
         rect.setPosition(curPos);
         other.rect.setPosition(otherPos);
     }
