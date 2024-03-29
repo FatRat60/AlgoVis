@@ -1,1 +1,6 @@
+- add win animation when sort is finsihed
 - add audio to sort render
+
+extras:
+    continue rendering in other thread while handling resize or window move events 
+        so the window doesn't freeze up

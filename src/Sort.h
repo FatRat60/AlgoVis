@@ -74,6 +74,7 @@ class Sort
 
     private:
         void initShapeCopy(Shape *copy, Shape *original);
+        void win();
         void bubbleSort();
         void mergeSort(int left, int right);
         void merge(int left, int middle, int right);

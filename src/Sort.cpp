@@ -97,7 +97,11 @@ void Sort::doSort()
     default:
         break;
     }
-    sortDone = !killThread; // set sortDOne to true only if thread wasnt killed
+
+    if (!killThread) // dont play animation if thread is killed
+    {
+        win();
+    }
 }
 
 void Sort::initShapeCopy(Shape *copy, Shape *original)
@@ -108,6 +112,17 @@ void Sort::initShapeCopy(Shape *copy, Shape *original)
     copy->rect.setSize(original->rect.getSize());
     copy->rect.setOutlineColor(original->rect.getOutlineColor());
     copy->rect.setOutlineThickness(original->rect.getOutlineThickness());
+}
+
+void Sort::win()
+{
+    // slowly iterate thru shapes and turn them green
+        for (int i = 0; i < MAX_ARRAY_SIZE; i++)
+        {
+            shapes[i].rect.setFillColor(sf::Color::Green);
+            std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
+        }
+        sortDone = true;
 }
 
 void Sort::bubbleSort()

@@ -51,6 +51,10 @@ void Renderer::EventLoop()
                     switch (event.key.scancode)
                     {
                     case sf::Keyboard::Scan::R:
+                        // set all shapes white again
+                        for (int i = 0; i < MAX_ARRAY_SIZE; i++)
+                            sort.shapes[i].rect.setFillColor(sf::Color::White);
+                        showStats = false;
                         sort.shuffle();
                         break;
 
