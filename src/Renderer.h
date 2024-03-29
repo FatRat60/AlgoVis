@@ -16,6 +16,7 @@ class Renderer
         sf::RenderWindow window;
         sf::Font font;
         sf::Text title_text;
+        sf::Text repo_text;
         Sort sort;
         std::thread sortThread;
         bool showStats;

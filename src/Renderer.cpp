@@ -96,6 +96,19 @@ void Renderer::EventLoop()
                 }
                 break;
 
+            case sf::Event::MouseButtonReleased:
+                if (event.mouseButton.button == sf::Mouse::Left)
+                {
+                    // get bounds of repo_Text
+                    sf::FloatRect bounds = repo_text.getGlobalBounds();
+                    if (event.mouseButton.x > bounds.left && event.mouseButton.y < (bounds.top + bounds.height) )
+                    {
+                        // open url
+                        std::cout << "open url\n";
+                    }
+                }
+                break;
+
             default:
                 break;
             }
@@ -128,6 +141,7 @@ void Renderer::doDraw()
 
     // render title
     window.draw(title_text);
+    window.draw(repo_text);
 
     // update rect positions based on sort algorithm
     for (int i = 0; i < MAX_ARRAY_SIZE; i++)
@@ -138,11 +152,21 @@ void Renderer::doDraw()
 
 void Renderer::titleTextInit()
 {
+    // init left side text
     title_text.setFont(font);
     title_text.setString("Bubble Sort");
     title_text.setCharacterSize(TITLE_HEIGHT - 5);
     title_text.setFillColor(sf::Color::White);
     title_text.setPosition(sf::Vector2f(0, 0));
+
+    // init right side text
+    repo_text.setFont(font);
+    repo_text.setString("https://github.com/FatRat60/AlgoVis");
+    repo_text.setCharacterSize(TITLE_HEIGHT - 5);
+    repo_text.setFillColor(sf::Color::White);
+    float width = repo_text.getGlobalBounds().width; // get bounds of text
+    unsigned int screen_x = window.getSize().x; // get x of window
+    repo_text.setPosition(sf::Vector2f(screen_x - width, 0));
 }
 
 std::string Renderer::cleanTitle()
