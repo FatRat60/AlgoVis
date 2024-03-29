@@ -12,6 +12,8 @@ Sort::Sort(sf::Vector2u screenSize, int title_height, sortAlgorithms algorithm_c
     canRead = true;
     sortDone = false;
     chosenAlgorithm = algorithm_choice;
+    numSwaps = 0;
+    numArrayAccess = 0;
     // init array
 
     for (int i = 0; i < MAX_ARRAY_SIZE; i++)
@@ -34,6 +36,12 @@ void Sort::shuffle()
 void Sort::generateSeed()
 {
     rng_seed = std::chrono::system_clock::now().time_since_epoch().count();
+}
+
+void Sort::paws(Shape& s1, Shape& s2)
+{
+    numSwaps += 1; // inc swap cnt
+    s1.swap(s2); // actually do swap
 }
 
 void swap(Shape& s1, Shape& s2)
@@ -60,6 +68,12 @@ void Sort::shape_from_num(sf::Vector2u screenSize, int title_height)
     }
 }
 
+Shape& Sort::accessArray(int index)
+{
+    numArrayAccess += 1;
+    return shapes[index];
+}
+
 void Sort::doSort()
 {
     switch (chosenAlgorithm)
@@ -83,7 +97,6 @@ void Sort::doSort()
     default:
         break;
     }
-    std::cout << "done sorting!\n";
     sortDone = !killThread; // set sortDOne to true only if thread wasnt killed
 }
 
@@ -110,10 +123,10 @@ void Sort::bubbleSort()
             shapes[i+1].rect.setFillColor(sf::Color::Red);
             std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
             // found a pair out of order
-            if (shapes[i+1] < shapes[i])
+            if (accessArray(i+1) < accessArray(i))
             {
                 didSwap = true;
-                swap(shapes[i], shapes[i+1]);
+                paws(accessArray(i), accessArray(i+1));
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
             shapes[i].rect.setFillColor(sf::Color::White);
@@ -121,10 +134,6 @@ void Sort::bubbleSort()
         }
         end_point--;
     }
-    if (killThread)
-        std::cout << "Thread killed\n";
-    if (!didSwap)
-        std::cout << "bubble finished\n";
 }
 
 void Sort::mergeSort(int left, int right)
@@ -158,36 +167,40 @@ void Sort::merge(int left, int middle, int right)
     while (left_start < middle && right_start < right)
     {
         Shape *original;
-        if (shapes[left_start] < shapes[right_start])
+        if (accessArray(left_start) < accessArray(right_start))
         {
-            original = &shapes[left_start++];
+            original = &accessArray(left_start++);
         }
         else 
         {
-            original = &shapes[right_start++];
+            original = &accessArray(right_start++);
         }
         initShapeCopy(&temp[k++], original);
+        numArrayAccess++; // inc cuz temp accessed
     }
     // write remaining values from either left or right
     if (left_start < middle)
     {
         for (int i = left_start; i < middle; i++)
         {
-            initShapeCopy(&temp[k++], &shapes[i]);
+            initShapeCopy(&temp[k++], &accessArray(i));
+            numArrayAccess++;
         }
     }
     else
     {
         for (int i = right_start; i < right; i++)
         {
-            initShapeCopy(&temp[k++], &shapes[i]);
+            initShapeCopy(&temp[k++], &accessArray(i));
+            numArrayAccess++;
         }
     }
 
     // copy from temp back to shapes
     for (int i = 0; i < SIZE; i++)
     {
-        swap(shapes[i+left], temp[i]); // swap with temp
+        paws(accessArray(i+left), temp[i]);
+        numArrayAccess++;
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
 }
@@ -197,18 +210,16 @@ void Sort::selectionSort()
     int start = 0;
     while (start < MAX_ARRAY_SIZE && !killThread)
     {
-        Shape *lowest = &shapes[start];
         int swapIndex = start;
-        lowest->rect.setFillColor(sf::Color::Red);
+        shapes[swapIndex].rect.setFillColor(sf::Color::Red);
         for (int i = start + 1; i < MAX_ARRAY_SIZE; i++)
         {
             shapes[i].rect.setFillColor(sf::Color::Red);
             std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
-            if (shapes[i] < *lowest)
+            if (accessArray(i) < accessArray(swapIndex))
             {
-                lowest->rect.setFillColor(sf::Color::White);
+                shapes[swapIndex].rect.setFillColor(sf::Color::White);
                 shapes[start].rect.setFillColor(sf::Color::Red);
-                lowest = &shapes[i];
                 swapIndex = i;
             }
             else
@@ -216,9 +227,9 @@ void Sort::selectionSort()
                 shapes[i].rect.setFillColor(sf::Color::White);
             }
         }
-        swap(shapes[start], shapes[swapIndex]);
+        paws(accessArray(start), accessArray(swapIndex));
         shapes[start].rect.setFillColor(sf::Color::White);
-        lowest->rect.setFillColor(sf::Color::White);
+        shapes[swapIndex].rect.setFillColor(sf::Color::White);
         start++;
     }
 }
@@ -231,18 +242,18 @@ void Sort::insertionSort()
             break;
         shapes[i].rect.setFillColor(sf::Color::Red);
         Shape key;
-        initShapeCopy(&key, &shapes[i]);
+        initShapeCopy(&key, &accessArray(i));
         int j = i - 1;
         std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY) / 2); // delay sort
-        while (j >= 0 && key < shapes[j])
+        while (j >= 0 && key < accessArray(j))
         {
             shapes[j].rect.setFillColor(sf::Color::Red);
             std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY) / 2); // delay sort
-            swap(shapes[j+1], shapes[j]);
+            paws(accessArray(j+1), accessArray(j));
             shapes[j].rect.setFillColor(sf::Color::White);
             j--;
         }
-        swap(shapes[j+1], key);
+        paws(accessArray(j+1), key);
         shapes[j+1].rect.setFillColor(sf::Color::White);
         std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY) / 2); // delay sort
     }

@@ -61,12 +61,16 @@ class Sort
         bool killThread;
         bool canRead;
         bool sortDone;
+        int numSwaps;
+        int numArrayAccess;
         Sort(sf::Vector2u screenSize, int title_height, sortAlgorithms algorithm_choice);
         void doSort();
         void shuffle();
         void generateSeed();
+        void paws(Shape& s1, Shape& s2); // extra layer for swap to inc numSwaps
         friend void swap(Shape& s1, Shape& s2);
         void shape_from_num(sf::Vector2u screenSize, int title_height);
+        Shape& accessArray(int index);
 
     private:
         void initShapeCopy(Shape *copy, Shape *original);

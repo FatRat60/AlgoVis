@@ -8,24 +8,26 @@
 
 #define MIN_WIN_SIZE_X 800
 #define MIN_WIN_SIZE_Y 600
-#define TITLE_HEIGHT 50
+#define TITLE_HEIGHT 20
 
 class Renderer
 {
     public:
         sf::RenderWindow window;
-        sf::RectangleShape title_bar;
         sf::Font font;
         sf::Text title_text;
         Sort sort;
         std::thread sortThread;
+        bool showStats;
         Renderer();
         void EventLoop();
 
     private:
-        void titleBarInit();
         void titleTextInit();
         void doDraw();
+        std::string cleanTitle();
+        template<typename ... Args>
+        std::string string_format(const std::string& format, Args ... args);
 };
 
 #endif

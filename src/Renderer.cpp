@@ -15,8 +15,8 @@ Renderer::Renderer()
         std::cout << "Could not load font!\n";
         exit(1);
     }
-    titleBarInit();
     titleTextInit();
+    showStats = false;
 }
 
 void Renderer::EventLoop()
@@ -40,7 +40,6 @@ void Renderer::EventLoop()
                     event.size.height = MIN_WIN_SIZE_Y;
                     window.setSize(sf::Vector2u(event.size.width, event.size.height));
                 }
-                title_bar.setSize(sf::Vector2f(event.size.width, TITLE_HEIGHT));
                 sort.shape_from_num(sf::Vector2u(event.size.width, event.size.height), TITLE_HEIGHT); // update size/position of shapes to fit new screen
                 break;
 
@@ -48,6 +47,7 @@ void Renderer::EventLoop()
                 // commands usable while not sorting
                 if (!sortThread.joinable())
                 {
+                    showStats = false;
                     switch (event.key.scancode)
                     {
                     case sf::Keyboard::Scan::R:
@@ -75,7 +75,9 @@ void Renderer::EventLoop()
                         break;
 
                     case sf::Keyboard::Scan::Space:
-                        std::cout << "Beginning Sort!\n";
+                        sort.numArrayAccess = 0;
+                        sort.numSwaps = 0;
+                        showStats = true;
                         sortThread = std::thread(&Sort::doSort, std::ref(sort)); // spawn the sorting thread
                         break;
 
@@ -110,8 +112,15 @@ void Renderer::doDraw()
 {
     window.clear(sf::Color::Black); // clear the screen
 
-    // render title block
-    window.draw(title_bar);
+    // update string with numswaps and numarray acces
+    if (showStats)
+    {
+        // get string first
+        std::string text = cleanTitle();
+        // format the stat string
+        std::string stat_str = string_format(" - Swaps: %d   Array Access: %d", sort.numSwaps, sort.numArrayAccess);
+        title_text.setString(text + stat_str);
+    }
 
     // render title
     window.draw(title_text);
@@ -123,19 +132,36 @@ void Renderer::doDraw()
     window.display(); // write to the screen
 }
 
-void Renderer::titleBarInit()
-{
-    title_bar.setFillColor(sf::Color::White);
-    title_bar.setPosition(0, 0);
-    title_bar.setSize(sf::Vector2f(MIN_WIN_SIZE_X, TITLE_HEIGHT));
-}
-
 void Renderer::titleTextInit()
 {
-    float half_width = MIN_WIN_SIZE_X / 2;
     title_text.setFont(font);
     title_text.setString("Bubble Sort");
-    title_text.setCharacterSize(TITLE_HEIGHT / 2);
-    title_text.setFillColor(sf::Color::Black);
-    title_text.setPosition(sf::Vector2f(half_width / 2, 0));
+    title_text.setCharacterSize(TITLE_HEIGHT - 5);
+    title_text.setFillColor(sf::Color::White);
+    title_text.setPosition(sf::Vector2f(0, 0));
+}
+
+std::string Renderer::cleanTitle()
+{
+    std::string dirtyTitle = title_text.getString();
+    // iterate till - and discard anything after that
+    size_t n = 0;
+    auto it = dirtyTitle.begin();
+    while (*it != '-' && it < dirtyTitle.end())
+    {
+        it++;
+        n++;
+    }
+    
+    return dirtyTitle.substr(0, n - (it != dirtyTitle.end())); // subtract n by 1 only if end not reached
+}
+
+template<typename ... Args>
+std::string Renderer::string_format(const std::string& format, Args ... args)
+{
+    size_t size = snprintf(nullptr, 0, format.c_str(), args ...) + 1;
+    if ( size <= 0) return "";
+    std::unique_ptr<char[]> buf( new char[size]);
+    snprintf(buf.get(), size, format.c_str(), args ...);
+    return std::string(buf.get(), buf.get() + size - 1);
 }
