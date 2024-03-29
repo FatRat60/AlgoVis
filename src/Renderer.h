@@ -27,6 +27,7 @@ class Renderer
 {
     public:
         sf::RenderWindow window;
+        sf::Image icon;
         sf::Font font;
         sf::Text title_text;
         sf::Text repo_text;

@@ -9,6 +9,14 @@ Renderer::Renderer()
     window(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer")
 {
     window.setVerticalSyncEnabled(true); // framerate will match the screens refresh rate
+
+    // init icon
+    if (icon.loadFromFile("resources/icon.png"))
+    {
+        sf::Vector2u iconSize = icon.getSize();
+        window.setIcon(iconSize.x, iconSize.y, icon.getPixelsPtr());
+    }
+    
     // init font
     if (!font.loadFromFile("resources/arial.ttf"))
     {

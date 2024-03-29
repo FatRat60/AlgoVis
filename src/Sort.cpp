@@ -217,7 +217,7 @@ void Sort::merge(int left, int middle, int right)
         paws(accessArray(i+left), temp[i]);
         numArrayAccess++;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
+    std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY * 2)); // delay sort
 }
 
 void Sort::selectionSort()
