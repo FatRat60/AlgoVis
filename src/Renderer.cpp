@@ -104,7 +104,7 @@ void Renderer::EventLoop()
                     if (event.mouseButton.x > bounds.left && event.mouseButton.y < (bounds.top + bounds.height) )
                     {
                         // open url
-                        std::cout << "open url\n";
+                        OpenURL(GITHUB_URL);
                     }
                 }
                 break;
@@ -161,7 +161,7 @@ void Renderer::titleTextInit()
 
     // init right side text
     repo_text.setFont(font);
-    repo_text.setString("https://github.com/FatRat60/AlgoVis");
+    repo_text.setString(GITHUB_URL);
     repo_text.setCharacterSize(TITLE_HEIGHT - 5);
     repo_text.setFillColor(sf::Color::White);
     float width = repo_text.getGlobalBounds().width; // get bounds of text
