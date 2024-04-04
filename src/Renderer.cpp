@@ -7,7 +7,8 @@
 
 Renderer::Renderer()
     : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), TITLE_HEIGHT, bubble_sort),
-    window(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer")
+    window(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer",
+    sf::Style::Titlebar | sf::Style::Close)
 {
     window.setVerticalSyncEnabled(true); // framerate will match the screens refresh rate
 
@@ -47,18 +48,6 @@ void Renderer::EventLoop()
             case sf::Event::Closed:
                 window.close();
                 sort.killThread = sortThread.joinable();
-                break;
-
-            case sf::Event::Resized:
-                if (event.size.width < MIN_WIN_SIZE_X || event.size.height < MIN_WIN_SIZE_Y || event.size.width % MAX_ARRAY_SIZE != 0)
-                {
-                    event.size.width = MIN_WIN_SIZE_X;
-                    event.size.height = MIN_WIN_SIZE_Y;
-                    window.setSize(sf::Vector2u(event.size.width, event.size.height));
-                }
-                sort.shapesLock.lock();
-                sort.shape_from_num(sf::Vector2u(event.size.width, event.size.height), TITLE_HEIGHT); // update size/position of shapes to fit new screen
-                sort.shapesLock.unlock();
                 break;
 
             case sf::Event::KeyReleased:

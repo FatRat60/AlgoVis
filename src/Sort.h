@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <cstdint>
-#include <mutex>
 
 #define MAX_ARRAY_SIZE 100
 #define SORT_DELAY 5
@@ -64,7 +63,6 @@ class Sort
         bool sortDone;
         int numSwaps;
         int numArrayAccess;
-        std::mutex shapesLock;
         Sort(sf::Vector2u screenSize, int title_height, sortAlgorithms algorithm_choice);
         void doSort();
         void shuffle();
