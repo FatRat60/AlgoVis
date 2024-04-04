@@ -33,6 +33,7 @@ class Renderer
         sf::Text repo_text;
         Sort sort;
         std::thread sortThread;
+        std::thread renderThread;
         bool showStats;
         Renderer();
         void EventLoop();

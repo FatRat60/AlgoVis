@@ -25,10 +25,17 @@ Renderer::Renderer()
     }
     titleTextInit();
     showStats = false;
+
+    // deactive window in main thread
+    window.setActive(false);
 }
 
 void Renderer::EventLoop()
 {
+    // launch render thread
+    renderThread = std::thread( [this] { this->doDraw(); });
+
+    // begin event loop
     while (window.isOpen())
     {
         sf::Event event;
@@ -121,8 +128,6 @@ void Renderer::EventLoop()
                 break;
             }
         }
-        
-        doDraw();
 
         if (sort.sortDone || sort.killThread)
         {
@@ -131,11 +136,19 @@ void Renderer::EventLoop()
             sort.killThread = false;
         }
     }
+
+    // join render thread
+    renderThread.join();
 }
 
 void Renderer::doDraw()
 {
-    window.clear(sf::Color::Black); // clear the screen
+    // active window in render thread
+    window.setActive(true);
+
+    while (window.isOpen())
+    {
+        window.clear(sf::Color::Black); // clear the screen
 
     // update string with numswaps and numarray acces
     if (showStats)
@@ -156,6 +169,7 @@ void Renderer::doDraw()
         window.draw(sort.shapes[i].rect);
 
     window.display(); // write to the screen
+    }
 }
 
 void Renderer::titleTextInit()
