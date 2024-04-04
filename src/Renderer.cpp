@@ -6,7 +6,8 @@
 
 Renderer::Renderer()
     : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), TITLE_HEIGHT, bubble_sort),
-    window(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer")
+    window(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer",
+    sf::Style::Titlebar | sf::Style::Close)
 {
     window.setVerticalSyncEnabled(true); // framerate will match the screens refresh rate
 
