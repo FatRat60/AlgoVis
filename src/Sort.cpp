@@ -5,6 +5,7 @@
 #include <array>
 #include <iostream>
 #include <thread>
+#include <mutex>
 
 Sort::Sort(sf::Vector2u screenSize, int title_height, sortAlgorithms algorithm_choice)
 {
@@ -41,7 +42,9 @@ void Sort::generateSeed()
 void Sort::paws(Shape& s1, Shape& s2)
 {
     numSwaps += 1; // inc swap cnt
+    shapesLock.lock();
     s1.swap(s2); // actually do swap
+    shapesLock.unlock();
 }
 
 void swap(Shape& s1, Shape& s2)
@@ -66,12 +69,16 @@ void Sort::shape_from_num(sf::Vector2u screenSize, int title_height)
         cur->rect.setSize(sf::Vector2f(width, height));
         cur->rect.setPosition(sf::Vector2f(i * width, screenSize.y - height));
     }
+    std::cout << "width: " << screenSize.x << "\nlast El: " << shapes[MAX_ARRAY_SIZE - 1].rect.getPosition().x << "\n";
 }
 
 Shape& Sort::accessArray(int index)
 {
     numArrayAccess += 1;
-    return shapes[index];
+    shapesLock.lock();
+    Shape& target = shapes[index];
+    shapesLock.unlock();
+    return target;
 }
 
 void Sort::doSort()

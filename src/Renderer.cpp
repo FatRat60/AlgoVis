@@ -3,11 +3,11 @@
 #include "Sort.h"
 #include <iostream>
 #include <thread>
+#include <mutex>
 
 Renderer::Renderer()
     : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), TITLE_HEIGHT, bubble_sort),
-    window(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer",
-    sf::Style::Titlebar | sf::Style::Close)
+    window(sf::VideoMode(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), "Algorithm Visualizer")
 {
     window.setVerticalSyncEnabled(true); // framerate will match the screens refresh rate
 
@@ -50,13 +50,15 @@ void Renderer::EventLoop()
                 break;
 
             case sf::Event::Resized:
-                if (event.size.width < MIN_WIN_SIZE_X || event.size.height < MIN_WIN_SIZE_Y)
+                if (event.size.width < MIN_WIN_SIZE_X || event.size.height < MIN_WIN_SIZE_Y || event.size.width % MAX_ARRAY_SIZE != 0)
                 {
                     event.size.width = MIN_WIN_SIZE_X;
                     event.size.height = MIN_WIN_SIZE_Y;
                     window.setSize(sf::Vector2u(event.size.width, event.size.height));
                 }
+                sort.shapesLock.lock();
                 sort.shape_from_num(sf::Vector2u(event.size.width, event.size.height), TITLE_HEIGHT); // update size/position of shapes to fit new screen
+                sort.shapesLock.unlock();
                 break;
 
             case sf::Event::KeyReleased:
@@ -171,6 +173,9 @@ void Renderer::doDraw()
 
     window.display(); // write to the screen
     }
+
+    // deactive before exiting thread
+    window.setActive(false);
 }
 
 void Renderer::titleTextInit()
