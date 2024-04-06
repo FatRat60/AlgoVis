@@ -3,7 +3,6 @@
 #include "Sort.h"
 #include <iostream>
 #include <thread>
-#include <mutex>
 
 Renderer::Renderer()
     : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), TITLE_HEIGHT, bubble_sort),
