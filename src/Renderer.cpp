@@ -84,6 +84,11 @@ void Renderer::EventLoop()
                         sort.chosenAlgorithm = insertion_sort;
                         break;
 
+                    case sf::Keyboard::Scan::Num0:
+                        title_text.setString("Bogo Sort");
+                        sort.chosenAlgorithm = bogo_sort;
+                        break;
+
                     case sf::Keyboard::Scan::Space:
                         sort.numArrayAccess = 0;
                         sort.numSwaps = 0;

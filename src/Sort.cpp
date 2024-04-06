@@ -95,6 +95,10 @@ void Sort::doSort()
     case insertion_sort:
         insertionSort();
         break;
+
+    case bogo_sort:
+        bogoSort();
+        break;
     
     default:
         break;
@@ -273,5 +277,27 @@ void Sort::insertionSort()
         paws(accessArray(j+1), key);
         shapes[j+1].rect.setFillColor(sf::Color::White);
         std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY) / 2); // delay sort
+    }
+}
+
+void Sort::bogoSort()
+{
+    bool isSorted = false;
+    while (!isSorted && !killThread)
+    {
+        isSorted = true;
+        // shuffle
+        shuffle();
+        numSwaps += 100;
+        // iterate through arr
+        for (int i = 0; i < MAX_ARRAY_SIZE - 1; i++)
+        {
+            shapes[i].rect.setFillColor(sf::Color::Red);
+            shapes[i+1].rect.setFillColor(sf::Color::Red);
+            isSorted = (accessArray(i) < accessArray(i+1)) & isSorted;
+            std::this_thread::sleep_for(std::chrono::milliseconds(SORT_DELAY)); // delay sort
+            shapes[i].rect.setFillColor(sf::Color::White);
+            shapes[i+1].rect.setFillColor(sf::Color::White);
+        }
     }
 }

@@ -13,7 +13,8 @@ enum sortAlgorithms
     bubble_sort,
     merge_sort,
     selection_sort,
-    insertion_sort
+    insertion_sort,
+    bogo_sort
 };
 
 struct Shape 
@@ -80,6 +81,7 @@ class Sort
         void merge(int left, int middle, int right);
         void selectionSort();
         void insertionSort();
+        void bogoSort();
 };
 
 #endif
