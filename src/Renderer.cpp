@@ -3,7 +3,6 @@
 #include "Sort.h"
 #include <iostream>
 #include <thread>
-#include <mutex>
 
 Renderer::Renderer()
     : sort(sf::Vector2u(MIN_WIN_SIZE_X, MIN_WIN_SIZE_Y), TITLE_HEIGHT, bubble_sort),
@@ -83,6 +82,11 @@ void Renderer::EventLoop()
                     case sf::Keyboard::Scan::Num4:
                         title_text.setString("Insertion Sort");
                         sort.chosenAlgorithm = insertion_sort;
+                        break;
+
+                    case sf::Keyboard::Scan::Num0:
+                        title_text.setString("Bogo Sort");
+                        sort.chosenAlgorithm = bogo_sort;
                         break;
 
                     case sf::Keyboard::Scan::Space:
